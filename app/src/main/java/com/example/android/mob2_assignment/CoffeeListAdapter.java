@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class CoffeeListAdapter extends ArrayAdapter<BluetoothDevice> {
 
     public CoffeeListAdapter(Activity context, ArrayList<BluetoothDevice> list) {
-        super(context, R.layout.item_list_layout,list);
+        super(context, R.layout.item_list_layout, list);
     }
 
     @Override

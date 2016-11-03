@@ -27,7 +27,8 @@
             android:gravity="center"
             android:maxLines="1"
             android:textColor="@color/bluetooth_name"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:text="sdadsa"/>
 
         <TextView
             android:id="@+id/machineAddress"
@@ -36,7 +37,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="Mac address"
+            android:text="Mac addressasda"
             android:textColor="@color/bluetooth_desc"
             android:textSize="12sp" />
 

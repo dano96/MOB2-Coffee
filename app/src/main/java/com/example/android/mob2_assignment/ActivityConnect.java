@@ -31,10 +31,8 @@ import java.util.UUID;
 public class ActivityConnect extends AppCompatActivity implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
     public static final int REQUEST_ENABLE_BT = 105;
     private static final String TAG = "ActivityConnect";
-
     private BluetoothAdapter bluetoothAdapter;
     private ArrayList<BluetoothDevice> devices;
-
     private ListView listView;
     private CoffeeListAdapter adapter;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -124,10 +122,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-       //ToDo startBluetoothConnection thread || register bluetooth service
-
+       BackgroundConnection bConnection = new BackgroundConnection(devices.get(position));
 
     }
 
@@ -158,6 +153,13 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         super.onDestroy();
         unregisterReceiver(mReceiver);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        bluetoothAdapter.cancelDiscovery();
+    }
+
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -173,47 +175,5 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-    }
-
-
-
-
-    //Connection THREAD
-    private class ConnectThread extends Thread {
-        private final BluetoothDevice mmDevice;
-        private final BluetoothSocket mmSocket;
-        private final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-
-        public ConnectThread(BluetoothDevice device) {
-            mmDevice = device;
-            BluetoothSocket tmp = null;
-            try {
-                tmp = mmDevice.createRfcommSocketToServiceRecord(uuid);
-
-            } catch (Exception e) {
-            }
-            mmSocket = tmp;
-        }
-
-        public void run() {
-            try {
-                mmSocket.connect();
-              //  manageConnectedSocket(mmSocket);
-            } catch (IOException connectException) {
-                try {
-                    mmSocket.close();
-                    showToast("Cannot connect to the device");
-                    finish();
-                } catch (IOException closeException) {
-                    finish();
-                }
-            }
-        }
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) {
-            }
-        }
     }
 }
