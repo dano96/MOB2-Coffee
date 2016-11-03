@@ -168,4 +168,6 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         }, 2000);
     }
 
+    //Hello world
+
 }
