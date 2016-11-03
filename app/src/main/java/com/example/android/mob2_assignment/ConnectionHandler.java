@@ -28,8 +28,8 @@ public class ConnectionHandler {
             BluetoothSocket tmp = null;
             try {
                 tmp = mmDevice.createRfcommSocketToServiceRecord(uuid);
-
             } catch (Exception e) {
+                e.printStackTrace();
             }
             mmSocket = tmp;
         }
