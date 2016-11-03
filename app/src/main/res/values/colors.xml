@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#795548</color>
+    <color name="colorPrimaryDark">#5d4037</color>
+    <color name="colorAccent">#ff7240</color>
+    <color name="colorListBackground">#FFC107</color>
+    <color name="colorListBackground2">#FFA000</color>
+    
+    <color name="toolbar_text">#F1F1F1</color>
+    <color name="cardview_background">#FFFFFF</color>
+
+    <color name="bluetooth_desc">#B4BAC0</color>
+    <color name="bluetooth_name">#2B3D4D</color>
+
+</resources>

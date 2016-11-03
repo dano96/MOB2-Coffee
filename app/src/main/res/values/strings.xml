@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Coffee slave</string>
+    <string name="main_info">DEVICE INFO</string>
+
+    <string name="name_infopanel">Name :</string>
+    <string name="mac_infopanel">Mac address :</string>
+    <string name="bonded_infopanel">Bonded :</string>
+
+    <string name="found_devices">Found devices :</string>
+</resources>
