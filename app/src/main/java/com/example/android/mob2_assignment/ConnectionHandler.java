@@ -2,17 +2,16 @@ package com.example.android.mob2_assignment;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
-import android.widget.Toast;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.UUID;
 
 public class ConnectionHandler {
-    private BluetoothSocket mSocket;
+    private static BluetoothSocket mSocket;
     private BluetoothDevice mDevice;
+    private static ConnectedThread readWrite;
 
     public ConnectionHandler(BluetoothDevice mDevice) {
         this.mDevice = mDevice;
@@ -20,7 +19,6 @@ public class ConnectionHandler {
 
     public static class ConnectThread extends Thread {
         private final BluetoothDevice mmDevice;
-        private final BluetoothSocket mmSocket;
         private final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
         public ConnectThread(BluetoothDevice device) {
@@ -31,16 +29,17 @@ public class ConnectionHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            mmSocket = tmp;
+            mSocket = tmp;
         }
 
         public void run() {
             try {
-                mmSocket.connect();
-                //  manageConnectedSocket(mmSocket);
+                mSocket.connect();
+                readWrite = new ConnectedThread(mSocket);
+                readWrite.start();
             } catch (IOException connectException) {
                 try {
-                    mmSocket.close();
+                    mSocket.close();
                 } catch (IOException closeException) {
                     closeException.printStackTrace();
                 }
@@ -48,7 +47,7 @@ public class ConnectionHandler {
         }
         public void cancel() {
             try {
-                mmSocket.close();
+                mSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -56,18 +55,17 @@ public class ConnectionHandler {
     }
 
     public static class ConnectedThread extends Thread {
-        private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
-            mmSocket = socket;
+            mSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
             try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
+                tmpIn = mSocket.getInputStream();
+                tmpOut = mSocket.getOutputStream();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -80,7 +78,8 @@ public class ConnectionHandler {
             try {
                 mmOutStream.write(bytes);
             } catch (IOException e) {
-                if (mmSocket == null) {
+                e.printStackTrace();
+                if (mSocket == null) {
                     cancel();
                 }
             }
@@ -89,11 +88,12 @@ public class ConnectionHandler {
         // Call this from the main activity to shutdown the connection /
         public void cancel() {
             try {
-                mmSocket.close();
+                mSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     public ConnectThread getConnectionThread() {
@@ -101,6 +101,6 @@ public class ConnectionHandler {
     }
 
     public ConnectedThread getReadWriteThread() {
-        return new ConnectedThread(mSocket);
+        return readWrite;
     }
 }

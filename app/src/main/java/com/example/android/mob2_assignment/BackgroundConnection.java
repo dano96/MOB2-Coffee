@@ -7,17 +7,21 @@ public class BackgroundConnection extends Application {
     private ConnectionHandler handler;
     private BluetoothDevice device;
 
-    public BackgroundConnection(BluetoothDevice device) {
-        this.device = device;
+    public BackgroundConnection() {
+        super();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        handler = new ConnectionHandler(device);
     }
 
     public ConnectionHandler getConnectionHandler() {
         return this.handler;
+    }
+
+    public void setDevice(BluetoothDevice device) {
+        this.device = device;
+        handler = new ConnectionHandler(device);
     }
 }

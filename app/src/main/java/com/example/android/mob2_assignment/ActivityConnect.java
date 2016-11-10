@@ -122,12 +122,14 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       BackgroundConnection bConnection = new BackgroundConnection(devices.get(position));
-        Thread connection = bConnection.getConnectionHandler().getConnectionThread();
-        Thread readAndWrite = bConnection.getConnectionHandler().getReadWriteThread();
+        ((BackgroundConnection) this.getApplicationContext()).setDevice(devices.get(position));
+        ConnectionHandler handler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
+        Thread connection = handler.getConnectionThread();
 
         connection.start();
-        readAndWrite.start();
+
+        Intent changeActivity = new Intent(ActivityConnect.this, CoffeeActivity.class);
+        startActivity(changeActivity);
 
     }
 
