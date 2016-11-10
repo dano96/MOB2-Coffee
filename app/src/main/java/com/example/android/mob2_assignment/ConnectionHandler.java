@@ -95,4 +95,12 @@ public class ConnectionHandler {
             }
         }
     }
+
+    public ConnectThread getConnectionThread() {
+        return new ConnectThread(mDevice);
+    }
+
+    public ConnectedThread getReadWriteThread() {
+        return new ConnectedThread(mSocket);
+    }
 }
