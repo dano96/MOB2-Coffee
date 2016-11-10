@@ -20,8 +20,9 @@ public class BackgroundConnection extends Application {
         return this.handler;
     }
 
-    public void setDevice(BluetoothDevice device) {
+    public void setDevice(BluetoothDevice device, ActivityConnect activityConnect) {
         this.device = device;
-        handler = new ConnectionHandler(device);
+
+        handler = new ConnectionHandler(device, activityConnect);
     }
 }

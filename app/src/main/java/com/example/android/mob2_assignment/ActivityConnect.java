@@ -1,6 +1,7 @@
 package com.example.android.mob2_assignment;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -22,15 +23,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.UUID;
 
 public class ActivityConnect extends AppCompatActivity implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
     public static final int REQUEST_ENABLE_BT = 105;
-    private static final String TAG = "ActivityConnect";
+    private ProgressDialog dialog;
     private BluetoothAdapter bluetoothAdapter;
     private ArrayList<BluetoothDevice> devices;
     private ListView listView;
@@ -65,25 +63,25 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             showToast("Your device does not support Bluetooth");
             finish();
         }
-        if(!bluetoothAdapter.isEnabled()){
+        if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent,REQUEST_ENABLE_BT );
-        }else {
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        } else {
             init();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
     }
 
-    private void init(){
+    private void init() {
         findViews();
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         devices = new ArrayList<>();
-        if(!bondedDevices.isEmpty()){
+        if (!bondedDevices.isEmpty()) {
             devices.addAll(bondedDevices);
         }
 
-        adapter = new CoffeeListAdapter(this,devices);
+        adapter = new CoffeeListAdapter(this, devices);
         listView.setAdapter(adapter);
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
@@ -93,8 +91,8 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         listView.setOnItemLongClickListener(this);
     }
 
-    private void findViews(){
-        listView = (ListView)findViewById(R.id.listview_main);
+    private void findViews() {
+        listView = (ListView) findViewById(R.id.listview_main);
         cardView = (CardView) findViewById(R.id.cardview_main);
         deviceInfo = (TextView) findViewById(R.id.info_textView);
     }
@@ -109,7 +107,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             } else if (resultCode == RESULT_CANCELED) {
                 showToast("Application requires bluetooth");
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent,REQUEST_ENABLE_BT );
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
         }
     }
@@ -122,20 +120,29 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ((BackgroundConnection) this.getApplicationContext()).setDevice(devices.get(position));
+        ((BackgroundConnection) this.getApplicationContext()).setDevice(devices.get(position), this);
         ConnectionHandler handler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
         Thread connection = handler.getConnectionThread();
 
+        dialog = ProgressDialog.show(this, "Connecting...", "Connecting to the device", true, false);
+        dialog.show();
         connection.start();
 
-        Intent changeActivity = new Intent(ActivityConnect.this, CoffeeActivity.class);
-        startActivity(changeActivity);
+    }
 
+    public void startNewActivity(BluetoothSocket socket) {
+        dialog.dismiss();
+        if (socket.isConnected()) {
+            Intent changeActivity = new Intent(ActivityConnect.this, CoffeeActivity.class);
+            startActivity(changeActivity);
+        } else {
+            Toast.makeText(this, "You cannot connect right now",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        if(cardView.getVisibility()==View.GONE) {
+        if (cardView.getVisibility() == View.GONE) {
             Slide slide = new Slide();
             ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
             TransitionManager.beginDelayedTransition(root, slide);
@@ -150,8 +157,9 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         deviceBonded.setText(String.valueOf(devices.get(position).getBondState()));
         return true;
     }
-    public void showToast(String message){
-        Toast toast = Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT);
+
+    public void showToast(String message) {
+        Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
         toast.show();
     }
 

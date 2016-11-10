@@ -10,11 +10,29 @@ import java.util.UUID;
 
 public class ConnectionHandler {
     private static BluetoothSocket mSocket;
-    private BluetoothDevice mDevice;
+    private static ActivityConnect activityConnect;
     private static ConnectedThread readWrite;
+    private BluetoothDevice mDevice;
 
-    public ConnectionHandler(BluetoothDevice mDevice) {
+    public ConnectionHandler(BluetoothDevice mDevice, ActivityConnect activity) {
         this.mDevice = mDevice;
+        activityConnect = activity;
+    }
+
+    public static void cancel() {
+        try {
+            mSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ConnectThread getConnectionThread() {
+        return new ConnectThread(mDevice);
+    }
+
+    public ConnectedThread getReadWriteThread() {
+        return readWrite;
     }
 
     public static class ConnectThread extends Thread {
@@ -38,18 +56,14 @@ public class ConnectionHandler {
                 readWrite = new ConnectedThread(mSocket);
                 readWrite.start();
             } catch (IOException connectException) {
-                try {
-                    mSocket.close();
-                } catch (IOException closeException) {
-                    closeException.printStackTrace();
-                }
-            }
-        }
-        public void cancel() {
-            try {
-                mSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                cancel();
+            } finally {
+                activityConnect.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        activityConnect.startNewActivity(mSocket);
+                    }
+                });
             }
         }
     }
@@ -85,22 +99,22 @@ public class ConnectionHandler {
             }
         }
 
-        // Call this from the main activity to shutdown the connection /
-        public void cancel() {
-            try {
-                mSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        public void closeReadWriteConnection() {
+            if (mmInStream != null) {
+                try {
+                    mmInStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            if (mmOutStream !=null) {
+                try {
+                    mmOutStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            cancel();
         }
-
-    }
-
-    public ConnectThread getConnectionThread() {
-        return new ConnectThread(mDevice);
-    }
-
-    public ConnectedThread getReadWriteThread() {
-        return readWrite;
     }
 }
