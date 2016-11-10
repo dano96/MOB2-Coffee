@@ -9,31 +9,29 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
-import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Set;
 
-public class ActivityConnect extends AppCompatActivity implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
+public class ActivityConnect extends AppCompatActivity implements AdapterView.OnItemClickListener {
     public static final int REQUEST_ENABLE_BT = 105;
     private ProgressDialog dialog;
     private BluetoothAdapter bluetoothAdapter;
     private ArrayList<BluetoothDevice> devices;
-    private ListView listView;
     private CoffeeListAdapter adapter;
+    private static final int REQUEST_RUNTIME_PERMISSION = 1;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -48,16 +46,12 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             }
         }
     };
-    private CardView cardView;
-    private TextView deviceInfo;
     private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
-
-        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
@@ -75,7 +69,8 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
     }
 
     private void init() {
-        findViews();
+        ListView listView = (ListView) findViewById(R.id.listview_main);
+        Button buttonScan = (Button) findViewById(R.id.scan);
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         devices = new ArrayList<>();
         if (!bondedDevices.isEmpty()) {
@@ -84,18 +79,20 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
 
         adapter = new CoffeeListAdapter(this, devices);
         listView.setAdapter(adapter);
+
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
-        bluetoothAdapter.startDiscovery();
-
         listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
-    }
-
-    private void findViews() {
-        listView = (ListView) findViewById(R.id.listview_main);
-        cardView = (CardView) findViewById(R.id.cardview_main);
-        deviceInfo = (TextView) findViewById(R.id.info_textView);
+        buttonScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(ActivityConnect.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                } else {
+                    bluetoothAdapter.startDiscovery();
+                }
+            }
+        });
     }
 
     @Override
@@ -109,6 +106,17 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
                 showToast("Application requires bluetooth");
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_RUNTIME_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bluetoothAdapter.startDiscovery();
+            } else {
+                Toast.makeText(this, "Finding devices requires access to your location", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -138,24 +146,6 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         } else {
             Toast.makeText(this, "You cannot connect right now", Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        if (cardView.getVisibility() == View.GONE) {
-            Slide slide = new Slide();
-            ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
-            TransitionManager.beginDelayedTransition(root, slide);
-            cardView.setVisibility(View.VISIBLE);
-            deviceInfo.setVisibility(View.VISIBLE);
-        }
-        TextView deviceName = (TextView) findViewById(R.id.device_name);
-        TextView deviceAddress = (TextView) findViewById(R.id.device_mac);
-        TextView deviceBonded = (TextView) findViewById(R.id.device_bonded);
-        deviceName.setText(devices.get(position).getName());
-        deviceAddress.setText(devices.get(position).getAddress());
-        deviceBonded.setText(String.valueOf(devices.get(position).getBondState()));
-        return true;
     }
 
     public void showToast(String message) {
