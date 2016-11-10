@@ -5,15 +5,9 @@ import android.bluetooth.BluetoothDevice;
 
 public class BackgroundConnection extends Application {
     private ConnectionHandler handler;
-    private BluetoothDevice device;
 
     public BackgroundConnection() {
         super();
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
     }
 
     public ConnectionHandler getConnectionHandler() {
@@ -21,8 +15,6 @@ public class BackgroundConnection extends Application {
     }
 
     public void setDevice(BluetoothDevice device, ActivityConnect activityConnect) {
-        this.device = device;
-
         handler = new ConnectionHandler(device, activityConnect);
     }
 }

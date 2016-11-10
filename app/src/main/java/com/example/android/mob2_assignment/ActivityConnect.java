@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -127,7 +128,6 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         dialog = ProgressDialog.show(this, "Connecting...", "Connecting to the device", true, false);
         dialog.show();
         connection.start();
-
     }
 
     public void startNewActivity(BluetoothSocket socket) {
@@ -136,7 +136,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             Intent changeActivity = new Intent(ActivityConnect.this, CoffeeActivity.class);
             startActivity(changeActivity);
         } else {
-            Toast.makeText(this, "You cannot connect right now",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You cannot connect right now", Toast.LENGTH_LONG).show();
         }
     }
 

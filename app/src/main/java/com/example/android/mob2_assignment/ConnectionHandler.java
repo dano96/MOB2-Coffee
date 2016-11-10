@@ -3,32 +3,28 @@ package com.example.android.mob2_assignment;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class ConnectionHandler {
+class ConnectionHandler {
     private static BluetoothSocket mSocket;
-    private static ActivityConnect activityConnect;
-    private static CoffeeActivity coffeeActivity;
+    public static ActivityConnect activityConnect;
+    public static CoffeeActivity coffeeActivity;
     private static ConnectedThread readWrite;
     private BluetoothDevice mDevice;
 
-    public void setCoffeeActivity(CoffeeActivity activity) {
+    void setCoffeeActivity(CoffeeActivity activity) {
         coffeeActivity = activity;
     }
 
-    public ConnectionHandler(BluetoothDevice mDevice, ActivityConnect activity) {
+    ConnectionHandler(BluetoothDevice mDevice, ActivityConnect activity) {
         this.mDevice = mDevice;
         activityConnect = activity;
     }
 
-    public static void cancel() {
+    private static void cancel() {
         try {
             mSocket.close();
         } catch (IOException e) {
@@ -36,19 +32,19 @@ public class ConnectionHandler {
         }
     }
 
-    public ConnectThread getConnectionThread() {
+    ConnectThread getConnectionThread() {
         return new ConnectThread(mDevice);
     }
 
-    public ConnectedThread getReadWriteThread() {
+    ConnectedThread getReadWriteThread() {
         return readWrite;
     }
 
-    public static class ConnectThread extends Thread {
+    private static class ConnectThread extends Thread {
         private final BluetoothDevice mmDevice;
         private final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
-        public ConnectThread(BluetoothDevice device) {
+        ConnectThread(BluetoothDevice device) {
             mmDevice = device;
             BluetoothSocket tmp = null;
             try {
@@ -77,11 +73,11 @@ public class ConnectionHandler {
         }
     }
 
-    public static class ConnectedThread extends Thread {
+    static class ConnectedThread extends Thread {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
-        public ConnectedThread(BluetoothSocket socket) {
+        ConnectedThread(BluetoothSocket socket) {
             mSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -97,7 +93,7 @@ public class ConnectionHandler {
         }
 
         // Call this from the main activity to send data to the remote device /
-        public void write(byte[] bytes) {
+        void write(byte[] bytes) {
             try {
                 mmOutStream.write(bytes);
                 mmOutStream.flush();
@@ -111,15 +107,13 @@ public class ConnectionHandler {
 
         @Override
         public void run() {
-            byte[] buffer = new byte[1024];  // buffer store for the stream
+            byte[] buffer = new byte[1024];
              int bytes;
 
             while (true) {
                 try {
                     Log.d("Reading", "Is it reading");
                     bytes = mmInStream.read(buffer);
-
-                    final int finalBytes = bytes;
                     Log.d("Bytes", bytes + " ");
                     coffeeActivity.runOnUiThread(new Runnable() {
                         @Override
@@ -132,7 +126,7 @@ public class ConnectionHandler {
             }
         }
 
-        public void closeReadWriteConnection() {
+        void closeReadWriteConnection() {
             if (mmInStream != null) {
                 try {
                     mmInStream.close();
