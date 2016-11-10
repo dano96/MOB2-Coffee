@@ -2,17 +2,26 @@ package com.example.android.mob2_assignment;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.UUID;
 
 public class ConnectionHandler {
     private static BluetoothSocket mSocket;
     private static ActivityConnect activityConnect;
+    private static CoffeeActivity coffeeActivity;
     private static ConnectedThread readWrite;
     private BluetoothDevice mDevice;
+
+    public void setCoffeeActivity(CoffeeActivity activity) {
+        coffeeActivity = activity;
+    }
 
     public ConnectionHandler(BluetoothDevice mDevice, ActivityConnect activity) {
         this.mDevice = mDevice;
@@ -91,10 +100,34 @@ public class ConnectionHandler {
         public void write(byte[] bytes) {
             try {
                 mmOutStream.write(bytes);
+                mmOutStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
                 if (mSocket == null) {
                     cancel();
+                }
+            }
+        }
+
+        @Override
+        public void run() {
+            byte[] buffer = new byte[1024];  // buffer store for the stream
+             int bytes;
+
+            while (true) {
+                try {
+                    Log.d("Reading", "Is it reading");
+                    bytes = mmInStream.read(buffer);
+
+                    final int finalBytes = bytes;
+                    Log.d("Bytes", bytes + " ");
+                    coffeeActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                        }
+                    });
+                } catch (IOException e) {
+                    break;
                 }
             }
         }

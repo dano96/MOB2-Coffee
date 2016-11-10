@@ -24,6 +24,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         mHandler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
 
         readWrite = mHandler.getReadWriteThread();
+        mHandler.setCoffeeActivity(this);
     }
 
     @Override
@@ -31,10 +32,10 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.button:
                 Log.d("Writing", "Is it working");
-                readWrite.write("Say hello".getBytes());
+                readWrite.write("n".getBytes());
                 break;
             case R.id.button2:
-
+                readWrite.write("f".getBytes());
                 break;
             default:
                 break;
@@ -44,6 +45,11 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         mHandler.getReadWriteThread().closeReadWriteConnection();
     }
 }
