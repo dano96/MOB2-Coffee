@@ -9,13 +9,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +35,9 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
     private ArrayList<BluetoothDevice> devices;
     private CoffeeListAdapter adapter;
     private static final int REQUEST_RUNTIME_PERMISSION = 1;
+    private final String MAC_ADDRESS = "mac";
+    private String nfcData;
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -63,6 +69,13 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
             init();
+            nfcData = NFChandler.readTag(getIntent());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String mac = preferences.getString(MAC_ADDRESS, "");
+            Log.d("mac", mac + "something");
+            if(mac != ""){
+                connect(mac);
+            }
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -129,7 +142,13 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ((BackgroundConnection) this.getApplicationContext()).setDevice(devices.get(position), this);
+        String mac = devices.get(position).getAddress();
+        connect(mac);
+    }
+
+    private void connect(String macAddress){
+        BluetoothDevice btDevice = bluetoothAdapter.getRemoteDevice(macAddress);
+        ((BackgroundConnection) this.getApplicationContext()).setDevice(btDevice, this);
         ConnectionHandler handler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
         Thread connection = handler.getConnectionThread();
 
@@ -142,6 +161,14 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         dialog.dismiss();
         if (socket.isConnected()) {
             Intent changeActivity = new Intent(ActivityConnect.this, CoffeeActivity.class);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(MAC_ADDRESS, socket.getRemoteDevice().getAddress());
+            editor.commit();
+            editor.apply();
+            if(nfcData != null){
+                changeActivity.putExtra("nfcValue", nfcData);
+            }
             startActivity(changeActivity);
         } else {
             Toast.makeText(this, "You cannot connect right now", Toast.LENGTH_LONG).show();

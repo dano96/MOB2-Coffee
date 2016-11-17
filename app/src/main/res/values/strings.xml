@@ -7,4 +7,7 @@
     <string name="bonded_infopanel">Bonded :</string>
 
     <string name="found_devices">Found devices :</string>
+    <string name="preset">Add preset</string>
+
+
 </resources>
