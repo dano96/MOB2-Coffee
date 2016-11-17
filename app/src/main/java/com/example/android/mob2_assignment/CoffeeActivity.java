@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class CoffeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
@@ -23,18 +24,24 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee);
 
-        final ArrayList<String> arrayList = new ArrayList<String>();
-        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+        final ArrayList<Preset> arrayList = new ArrayList<>();
 
         Preset first = new Preset("Coffie every morning", 1, new Date());
         Preset second = new Preset("Coffie for 2 in lunch", 2, new Date());
         Preset third = new Preset("Coffie in an hour", 1, new Date());
 
+        // Add presets to arraylist
+        arrayList.addAll(Arrays.asList(first, second, third));
+
+        ArrayAdapter<Preset> itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
+
         ImageButton oneCupButton = (ImageButton) findViewById(R.id.oneCupButton);
         ImageButton twoCupsButton = (ImageButton) findViewById(R.id.twoCupsButton);
         ImageButton heatUpButton = (ImageButton) findViewById(R.id.heatUp);
         Button presetButton = (Button)findViewById(R.id.setPresetButton);
+
         ListView listView = (ListView) findViewById(R.id.presetList);
+        listView.setAdapter(itemsAdapter);
 
         oneCupButton.setOnClickListener(this);
         twoCupsButton.setOnClickListener(this);
