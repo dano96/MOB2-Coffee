@@ -1,4 +1,4 @@
-package com.example.android.mob2_assignment;
+package com.example.android.mob2_assignment.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,15 +9,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-
+import com.example.android.mob2_assignment.BackgroundConnection;
+import com.example.android.mob2_assignment.Preset;
+import com.example.android.mob2_assignment.R;
+import com.example.android.mob2_assignment.interfaces.BluetoothHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class CoffeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
+public class CoffeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    ConnectionHandler mHandler;
-    ConnectionHandler.ConnectedThread readWrite;
+    BluetoothHandler mHandler;
+    BluetoothHandler.ConnectedThread readWrite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +29,18 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
         final ArrayList<Preset> arrayList = new ArrayList<>();
 
-        Preset first = new Preset("Coffie every morning", 1, new Date());
-        Preset second = new Preset("Coffie for 2 in lunch", 2, new Date());
-        Preset third = new Preset("Coffie in an hour", 1, new Date());
+        Preset first = new Preset("Coffee every morning", 1, new Date());
+        Preset second = new Preset("Coffee for 2 in lunch", 2, new Date());
+        Preset third = new Preset("Coffee in an hour", 1, new Date());
 
-        // Add presets to arraylist
         arrayList.addAll(Arrays.asList(first, second, third));
 
         ArrayAdapter<Preset> itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
 
         ImageButton oneCupButton = (ImageButton) findViewById(R.id.oneCupButton);
         ImageButton twoCupsButton = (ImageButton) findViewById(R.id.twoCupsButton);
-        ImageButton heatUpButton = (ImageButton) findViewById(R.id.heatup);
-        Button presetButton = (Button)findViewById(R.id.setPresetButton);
+        ImageButton heatUpButton = (ImageButton) findViewById(R.id.heatUp);
+        Button presetButton = (Button) findViewById(R.id.setPresetButton);
 
         ListView listView = (ListView) findViewById(R.id.presetList);
         listView.setAdapter(itemsAdapter);
@@ -53,14 +55,12 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         readWrite = mHandler.getReadWriteThread();
         mHandler.setCoffeeActivity(this);
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
+        if (bundle != null) {
             String nfcValue = bundle.getString("nfcValue", "");
-            if(nfcValue != ""){
+            if (!nfcValue.equals("")) {
                 readWrite.write(nfcValue.getBytes());
             }
         }
-
-
     }
 
     @Override
@@ -73,7 +73,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.twoCupsButton:
                 readWrite.write("2".getBytes());
                 break;
-            case R.id.heatup:
+            case R.id.heatUp:
                 readWrite.write("0".getBytes());
                 break;
             case R.id.setPresetButton:
@@ -97,6 +97,6 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        //To-Do
     }
 }

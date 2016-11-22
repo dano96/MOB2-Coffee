@@ -10,16 +10,39 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android.mob2_assignment.CoffeeActivity">
 
-
     <ImageButton
-        android:id="@+id/heatup"
+        android:id="@+id/heatUp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginRight="20dp"
         android:scaleType="centerCrop"
+        android:src="@drawable/heatUp"
         android:layout_alignParentRight="true"
-        android:src="@drawable/heatup_button"
         />
+
+    <LinearLayout
+        android:id="@+id/Llayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/heatUp">
+
+        <ImageButton
+            android:id="@+id/oneCupButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/coffie_cup"
+            android:layout_weight="1"
+            android:layout_margin="10dp"/>
+
+        <ImageButton
+            android:id="@+id/twoCupsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/two_coffie_cups"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/setPresetButton"
@@ -34,35 +57,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/Llayout"
-        android:layout_above="@+id/setPresetButton"></ListView>
+        android:layout_above="@+id/setPreset"></ListView>
 
-    <LinearLayout
-        android:id="@+id/Llayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/heatup"
-        android:layout_alignParentStart="true">
 
-       <ImageButton
-           android:id="@+id/oneCupButton"
-           android:layout_width="wrap_content"
-           android:layout_height="match_parent"
-           android:adjustViewBounds="true"
-           android:scaleType="fitXY"
-           android:layout_weight="1"
-           android:layout_margin="20dp"
-           android:src="@drawable/onecup"/>
-        <ImageButton
-            android:id="@+id/twoCupsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:layout_margin="20dp"
-            android:src="@drawable/twocups"/>
-    </LinearLayout>
+
+
+
 
 
 </RelativeLayout>

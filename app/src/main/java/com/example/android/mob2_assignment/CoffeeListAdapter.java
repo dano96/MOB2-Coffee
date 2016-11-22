@@ -27,7 +27,7 @@ public class CoffeeListAdapter extends ArrayAdapter<BluetoothDevice> {
             holder.name = (TextView) item.findViewById(R.id.machineName);
             holder.address = (TextView) item.findViewById(R.id.machineAddress);
             item.setTag(holder);
-        }else {
+        } else {
             holder = (ViewHolder) item.getTag();
         }
         BluetoothDevice device = getItem(position);
@@ -37,9 +37,7 @@ public class CoffeeListAdapter extends ArrayAdapter<BluetoothDevice> {
         return item;
     }
 
-
     private static class ViewHolder{
         TextView name, address;
-
     }
 }

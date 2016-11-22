@@ -1,17 +1,12 @@
-package com.example.android.mob2_assignment;
+package com.example.android.mob2_assignment.interfaces;
 
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Parcelable;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-
-/**
- * Created by Lea on 17-Nov-16.
- */
 
 public class NFChandler {
 
