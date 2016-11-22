@@ -20,7 +20,7 @@
         android:contentDescription="@string/heat_up_img_desc"
         android:elevation="20dp"
         android:scaleType="centerInside"
-        android:src="@drawable/coffee_bean_icon" />
+        android:src="@drawable/heat_up" />
 
     <LinearLayout
         android:id="@+id/btnLayout"
@@ -31,23 +31,25 @@
 
         <ImageButton
             android:id="@+id/oneCupButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:contentDescription="@string/one_cup_img_desc"
             android:elevation="20dp"
-            android:src="@drawable/coffee_bean_icon" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/one_cup" />
 
         <ImageButton
             android:id="@+id/twoCupsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:contentDescription="@string/two_cups_img_desc"
             android:elevation="20dp"
-            android:src="@drawable/coffee_bean_icon" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/two_cups" />
     </LinearLayout>
 
     <ListView
