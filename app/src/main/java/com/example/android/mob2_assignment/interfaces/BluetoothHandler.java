@@ -1,25 +1,23 @@
-package com.example.android.mob2_assignment;
+package com.example.android.mob2_assignment.interfaces;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
+import com.example.android.mob2_assignment.activities.ActivityConnect;
+import com.example.android.mob2_assignment.activities.CoffeeActivity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-class ConnectionHandler {
+public class BluetoothHandler {
     private static BluetoothSocket mSocket;
-    public static ActivityConnect activityConnect;
-    public static CoffeeActivity coffeeActivity;
+    private static ActivityConnect activityConnect;
+    private static CoffeeActivity coffeeActivity;
     private static ConnectedThread readWrite;
     private BluetoothDevice mDevice;
 
-    void setCoffeeActivity(CoffeeActivity activity) {
-        coffeeActivity = activity;
-    }
-
-    ConnectionHandler(BluetoothDevice mDevice, ActivityConnect activity) {
+    public BluetoothHandler(BluetoothDevice mDevice, ActivityConnect activity) {
         this.mDevice = mDevice;
         activityConnect = activity;
     }
@@ -32,11 +30,15 @@ class ConnectionHandler {
         }
     }
 
-    ConnectThread getConnectionThread() {
+    public void setCoffeeActivity(CoffeeActivity activity) {
+        coffeeActivity = activity;
+    }
+
+    public ConnectThread getConnectionThread() {
         return new ConnectThread(mDevice);
     }
 
-    ConnectedThread getReadWriteThread() {
+    public ConnectedThread getReadWriteThread() {
         return readWrite;
     }
 
@@ -73,7 +75,7 @@ class ConnectionHandler {
         }
     }
 
-    static class ConnectedThread extends Thread {
+    public static class ConnectedThread extends Thread {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
@@ -93,7 +95,7 @@ class ConnectionHandler {
         }
 
         // Call this from the main activity to send data to the remote device /
-        void write(byte[] bytes) {
+        public void write(byte[] bytes) {
             try {
                 mmOutStream.write(bytes);
                 mmOutStream.flush();
@@ -108,7 +110,7 @@ class ConnectionHandler {
         @Override
         public void run() {
             byte[] buffer = new byte[1024];
-             int bytes;
+            int bytes;
 
             while (true) {
                 try {
@@ -126,7 +128,7 @@ class ConnectionHandler {
             }
         }
 
-        void closeReadWriteConnection() {
+        public void closeReadWriteConnection() {
             if (mmInStream != null) {
                 try {
                     mmInStream.close();
@@ -134,7 +136,7 @@ class ConnectionHandler {
                     e.printStackTrace();
                 }
             }
-            if (mmOutStream !=null) {
+            if (mmOutStream != null) {
                 try {
                     mmOutStream.close();
                 } catch (IOException e) {

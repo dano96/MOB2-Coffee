@@ -8,6 +8,9 @@
 
     <string name="found_devices">Found devices :</string>
     <string name="preset">Add preset</string>
+    <string name="one_cup_img_desc">One cup</string>
+    <string name="two_cups_img_desc">Two cups</string>
+    <string name="heat_up_img_desc">Heat up the coffee machine</string>
 
 
 </resources>

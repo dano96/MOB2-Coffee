@@ -1,4 +1,4 @@
-package com.example.android.mob2_assignment;
+package com.example.android.mob2_assignment.activities;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -25,19 +25,24 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.android.mob2_assignment.BackgroundConnection;
+import com.example.android.mob2_assignment.CoffeeListAdapter;
+import com.example.android.mob2_assignment.interfaces.BluetoothHandler;
+import com.example.android.mob2_assignment.interfaces.NFChandler;
+import com.example.android.mob2_assignment.R;
+
 import java.util.ArrayList;
 import java.util.Set;
 
 public class ActivityConnect extends AppCompatActivity implements AdapterView.OnItemClickListener {
     public static final int REQUEST_ENABLE_BT = 105;
+    private static final int REQUEST_RUNTIME_PERMISSION = 1;
+    private final String MAC_ADDRESS = "mac";
     private ProgressDialog dialog;
     private BluetoothAdapter bluetoothAdapter;
     private ArrayList<BluetoothDevice> devices;
     private CoffeeListAdapter adapter;
-    private static final int REQUEST_RUNTIME_PERMISSION = 1;
-    private final String MAC_ADDRESS = "mac";
-    private String nfcData;
-
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -52,6 +57,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             }
         }
     };
+    private String nfcData;
     private boolean doubleBackToExitPressedOnce = false;
 
     @Override
@@ -73,7 +79,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             String mac = preferences.getString(MAC_ADDRESS, "");
             Log.d("mac", mac + "something");
-            if(mac != ""){
+            if(!mac.equals("")){
                 connect(mac);
             }
         }
@@ -149,7 +155,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
     private void connect(String macAddress){
         BluetoothDevice btDevice = bluetoothAdapter.getRemoteDevice(macAddress);
         ((BackgroundConnection) this.getApplicationContext()).setDevice(btDevice, this);
-        ConnectionHandler handler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
+        BluetoothHandler handler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
         Thread connection = handler.getConnectionThread();
 
         dialog = ProgressDialog.show(this, "Connecting...", "Connecting to the device", true, false);
@@ -164,7 +170,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(MAC_ADDRESS, socket.getRemoteDevice().getAddress());
-            editor.commit();
+//            editor.commit();
             editor.apply();
             if(nfcData != null){
                 changeActivity.putExtra("nfcValue", nfcData);
