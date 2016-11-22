@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:scaleType="centerInside"
-        android:src="@drawable/coffee_bean_icon"
+        android:src="@drawable/heatup_button"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
@@ -35,7 +35,7 @@
             android:scaleType="fitXY"
             android:layout_weight="1"
             android:layout_margin="20dp"
-            android:src="@drawable/coffee_bean_icon" />
+            android:src="@drawable/onecup" />
 
         <ImageButton
             android:id="@+id/twoCupsButton"
@@ -45,7 +45,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:layout_margin="20dp"
-            android:src="@drawable/coffee_bean_icon" />
+            android:src="@drawable/twocups" />
     </LinearLayout>
 
     <ListView
