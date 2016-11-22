@@ -37,7 +37,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
         ImageButton oneCupButton = (ImageButton) findViewById(R.id.oneCupButton);
         ImageButton twoCupsButton = (ImageButton) findViewById(R.id.twoCupsButton);
-        ImageButton heatUpButton = (ImageButton) findViewById(R.id.heatUp);
+        ImageButton heatUpButton = (ImageButton) findViewById(R.id.heatup);
         Button presetButton = (Button)findViewById(R.id.setPresetButton);
 
         ListView listView = (ListView) findViewById(R.id.presetList);
@@ -73,7 +73,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.twoCupsButton:
                 readWrite.write("2".getBytes());
                 break;
-            case R.id.heatUp:
+            case R.id.heatup:
                 readWrite.write("0".getBytes());
                 break;
             case R.id.setPresetButton:
