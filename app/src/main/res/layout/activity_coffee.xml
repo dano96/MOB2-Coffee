@@ -20,7 +20,7 @@
         android:padding="10dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/heatup_button"
-        android:background="@color/actColour"
+        android:background="@drawable/circle"
         android:elevation="20dp"/>
 
     <LinearLayout
