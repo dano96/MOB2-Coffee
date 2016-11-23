@@ -2,15 +2,30 @@
     <string name="app_name">Coffee slave</string>
     <string name="main_info">DEVICE INFO</string>
 
-    <string name="name_infopanel">Name :</string>
-    <string name="mac_infopanel">Mac address :</string>
-    <string name="bonded_infopanel">Bonded :</string>
+    <string name="name_infoPanel">Name :</string>
+    <string name="mac_infoPanel">Mac address :</string>
+    <string name="bonded_infoPanel">Bonded :</string>
 
     <string name="found_devices">Found devices :</string>
     <string name="preset">Add preset</string>
     <string name="one_cup_img_desc">One cup</string>
     <string name="two_cups_img_desc">Two cups</string>
     <string name="heat_up_img_desc">Heat up the coffee machine</string>
-
-
+    <string name="oneCup_desc">Make one cup of coffee</string>
+    <string name="heatUp_desc">Prepare the machine</string>
+    <string name="twoCups_desc">Make two cups of coffee</string>
+    <string name="btnScan">scan</string>
+    <string name="presentNameHint">Please enter name of preset</string>
+    <string name="numOfCupsLbl">Please choose number of cups:</string>
+    <string name="one_cupText">One cup</string>
+    <string name="two_cupsText">Two cups</string>
+    <string name="set_the_timeLbl">Set the time:</string>
+    <string name="sampleHour">12</string>
+    <string name="timeSeparator">:</string>
+    <string name="sampleMinutes">00</string>
+    <string name="dateLbl">When to make coffee:</string>
+    <string name="radioBtnDateEvery">Every day</string>
+    <string name="radioBtnDateSelected">Selected date</string>
+    <string name="step_forwardBtn">Step forward</string>
+    <string name="current_dateText">[Current date]</string>
 </resources>

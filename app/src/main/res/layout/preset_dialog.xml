@@ -1,119 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/nameOfPreset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Please enter name of setting"/>
+        android:hint="@string/presentNameHint" />
 
     <TextView
-        android:text="Please choose number of cups:"
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
+        android:layout_margin="10dp"
+        android:text="@string/numOfCupsLbl"
         android:textSize="18sp"
-        android:layout_margin="10dp"/>
+        android:textStyle="bold" />
 
     <RadioGroup
-        android:id="@+id/radiocup"
+        android:id="@+id/radioGroupCup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:orientation="horizontal">
 
         <RadioButton
-            android:text="One cup"
+            android:id="@+id/radioButtonOneCup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton4"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="@string/one_cupText" />
 
         <RadioButton
-            android:text="Two cups"
+            android:id="@+id/radioButtonTwoCups"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton5"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="@string/two_cupsText" />
     </RadioGroup>
 
     <TextView
-        android:text="Set the time:"
+        android:id="@+id/textViewSetTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
+        android:layout_margin="10dp"
+        android:text="@string/set_the_timeLbl"
         android:textSize="18sp"
-        android:layout_margin="10dp"/>
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp">
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:orientation="horizontal">
+
         <EditText
-            android:id="@+id/hour"
+            android:id="@+id/hours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="12"
-            android:textSize="20sp"/>
+            android:hint="@string/sampleHour"
+            android:textSize="20sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" : "
-            android:textSize="20sp"/>
+            android:text="@string/timeSeparator"
+            android:textSize="20sp" />
+
         <EditText
             android:id="@+id/minutes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="00"
-            android:textSize="20sp"/>
+            android:hint="@string/sampleMinutes"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="When to make coffie:"
+        android:layout_margin="10dp"
+        android:text="@string/dateLbl"
         android:textSize="18sp"
-        android:layout_margin="10dp"/>
+        android:textStyle="bold" />
 
     <RadioGroup
-        android:id="@+id/time_to_makeradio"
+        android:id="@+id/time_to_makeRadio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:orientation="horizontal">
 
         <RadioButton
-            android:text="Every day"
+            android:id="@+id/radioButtonEvery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton6"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="@string/radioBtnDateEvery" />
 
         <RadioButton
-            android:text="Selected date"
+            android:id="@+id/radioButtonSelected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton7"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="@string/radioBtnDateSelected" />
     </RadioGroup>
 
     <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="[Current date]"
         android:layout_margin="10dp"
-        android:textSize="18sp"/>
+        android:text="@string/current_dateText"
+        android:textSize="18sp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Step forward one day"/>
-
-
-
-
+        android:layout_margin="10dp"
+        android:text="@string/step_forwardBtn" />
 </LinearLayout>

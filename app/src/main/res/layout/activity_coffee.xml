@@ -15,13 +15,14 @@
         android:id="@+id/heatUp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_margin="15dp"
-        android:scaleType="fitXY"
-        android:padding="10dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/heatup_button"
+        android:layout_margin="15dp"
         android:background="@drawable/circle"
-        android:elevation="20dp"/>
+        android:contentDescription="@string/heatUp_desc"
+        android:elevation="20dp"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/heatup_button" />
 
     <LinearLayout
         android:id="@+id/btnLayout"
@@ -34,27 +35,29 @@
             android:id="@+id/oneCupButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:layout_weight="1"
-            android:padding="10dp"
             android:layout_margin="20dp"
-            android:src="@drawable/onecup"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
             android:background="@color/actColour"
-            android:elevation="20dp" />
+            android:contentDescription="@string/oneCup_desc"
+            android:elevation="20dp"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/onecup" />
 
         <ImageButton
             android:id="@+id/twoCupsButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:layout_weight="1"
-            android:padding="10dp"
             android:layout_margin="20dp"
-            android:src="@drawable/twocups"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
             android:background="@color/actColour"
-            android:elevation="20dp"/>
+            android:contentDescription="@string/twoCups_desc"
+            android:elevation="20dp"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/twocups" />
     </LinearLayout>
 
     <ListView

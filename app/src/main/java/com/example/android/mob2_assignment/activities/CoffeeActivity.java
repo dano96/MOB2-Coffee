@@ -1,5 +1,6 @@
 package com.example.android.mob2_assignment.activities;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -25,14 +26,14 @@ import java.util.Date;
 
 public class CoffeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    BluetoothHandler mHandler;
-    BluetoothHandler.ConnectedThread readWrite;
-    RadioGroup radioCupGroup;
-    EditText hoursText;
-    EditText minText;
-    RadioGroup timeToMakeRadio;
-    EditText nameOfPreset;
-    ArrayAdapter<Preset> itemsAdapter;
+    private BluetoothHandler mHandler;
+    private BluetoothHandler.ConnectedThread readWrite;
+    private RadioGroup radioCupGroup;
+    private EditText hoursText;
+    private EditText minText;
+    private RadioGroup timeToMakeRadio;
+    private EditText nameOfPreset;
+    private ArrayAdapter<Preset> itemsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,31 +90,32 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 readWrite.write("0".getBytes());
                 break;
             case R.id.setPresetButton:
-                View dialogLayout = getLayoutInflater().inflate(R.layout.preset_dialog, null);
+                @SuppressLint("InflateParams") View dialogLayout = getLayoutInflater().inflate(R.layout.preset_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Create a preset");
                 builder.setView(dialogLayout);
                 builder.setCancelable(false);
 
                 nameOfPreset = (EditText) dialogLayout.findViewById(R.id.nameOfPreset);
-                radioCupGroup = (RadioGroup) dialogLayout.findViewById(R.id.radiocup);
-                hoursText = (EditText) dialogLayout.findViewById(R.id.hour);
+                radioCupGroup = (RadioGroup) dialogLayout.findViewById(R.id.radioGroupCup);
+                hoursText = (EditText) dialogLayout.findViewById(R.id.hours);
                 minText = (EditText) dialogLayout.findViewById(R.id.minutes);
-                timeToMakeRadio = (RadioGroup) dialogLayout.findViewById(R.id.time_to_makeradio);
+                timeToMakeRadio = (RadioGroup) dialogLayout.findViewById(R.id.time_to_makeRadio);
 
                 builder.setNegativeButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int selectedRadioButton = radioCupGroup.getCheckedRadioButtonId();
-                        RadioButton button = (RadioButton) findViewById(R.id.radioButton4);
                         String name = nameOfPreset.getText().toString();
-                        int cup = selectedRadioButton == R.id.radioButton4? 1 : 2;
-                        Date somedate = new Date();
-                        Preset current = new Preset(name, cup, somedate);
+
+                        int selectedRadioButton = radioCupGroup.getCheckedRadioButtonId();
+                        int cup = (selectedRadioButton == R.id.radioButtonOneCup) ? 1 : 2;
+
+                        Preset current = new Preset(name, cup, new Date());
                         itemsAdapter.add(current);
 
                     }
                 });
+
                 builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
