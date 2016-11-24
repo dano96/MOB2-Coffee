@@ -5,10 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/actColour"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding = "16dp"
     tools:context="com.example.android.mob2_assignment.activities.CoffeeActivity">
 
     <ImageButton
@@ -38,7 +35,7 @@
             android:layout_margin="20dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:background="@color/actColour"
+            android:background="@drawable/square"
             android:contentDescription="@string/oneCup_desc"
             android:elevation="20dp"
             android:padding="10dp"
@@ -52,7 +49,7 @@
             android:layout_margin="20dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:background="@color/actColour"
+            android:background="@drawable/square"
             android:contentDescription="@string/twoCups_desc"
             android:elevation="20dp"
             android:padding="10dp"

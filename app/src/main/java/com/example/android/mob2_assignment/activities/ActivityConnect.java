@@ -67,41 +67,34 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            showToast("Your device does not support Bluetooth");
-            finish();
+                showToast("Your device does not support Bluetooth");
+                finish();
         }
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
             init();
-            nfcData = NFChandler.readTag(getIntent());
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String mac = preferences.getString(MAC_ADDRESS, "");
-            Log.d("mac", mac + "something");
-            if(!mac.equals("")){
-                connect(mac);
-            }
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
     }
 
     private void init() {
-        ListView listView = (ListView) findViewById(R.id.listView_main);
-        Button buttonScan = (Button) findViewById(R.id.scan);
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         devices = new ArrayList<>();
         if (!bondedDevices.isEmpty()) {
             devices.addAll(bondedDevices);
         }
-
+        ListView listView = (ListView) findViewById(R.id.listView_main);
         adapter = new CoffeeListAdapter(this, devices);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
-        listView.setOnItemClickListener(this);
+
+        Button buttonScan = (Button) findViewById(R.id.scan);
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +107,13 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
                 }
             }
         });
+
+        nfcData = NFChandler.readTag(getIntent());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String mac = preferences.getString(MAC_ADDRESS, "");
+        if(!mac.equals("")){
+            connect(mac);
+        }
     }
 
     @Override
@@ -124,7 +124,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
                 showToast("Bluetooth enabled");
                 init();
             } else if (resultCode == RESULT_CANCELED) {
-                showToast("Application requires bluetooth");
+                 Toast.makeText(getApplicationContext(),"Application requires bluetooth",Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -165,7 +165,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(MAC_ADDRESS, socket.getRemoteDevice().getAddress());
-//            editor.commit();
+            editor.commit();
             editor.apply();
             if(nfcData != null){
                 changeActivity.putExtra("nfcValue", nfcData);
