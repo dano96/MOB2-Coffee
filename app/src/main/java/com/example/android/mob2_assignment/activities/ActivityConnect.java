@@ -143,12 +143,6 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String mac = devices.get(position).getAddress();
         connect(mac);
