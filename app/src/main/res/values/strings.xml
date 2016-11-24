@@ -20,7 +20,7 @@
     <string name="one_cupText">One cup</string>
     <string name="two_cupsText">Two cups</string>
     <string name="set_the_timeLbl">Set the time:</string>
-    <string name="sampleHour">12</string>
+    <string name="sampleHour">12:00</string>
     <string name="timeSeparator">:</string>
     <string name="sampleMinutes">00</string>
     <string name="dateLbl">When to make coffee:</string>

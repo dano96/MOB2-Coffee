@@ -19,7 +19,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -67,8 +66,8 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-                showToast("Your device does not support Bluetooth");
-                finish();
+            showToast("Your device does not support Bluetooth");
+            finish();
         }
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -111,7 +110,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         nfcData = NFChandler.readTag(getIntent());
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String mac = preferences.getString(MAC_ADDRESS, "");
-        if(!mac.equals("")){
+        if (!mac.equals("")) {
             connect(mac);
         }
     }
@@ -124,7 +123,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
                 showToast("Bluetooth enabled");
                 init();
             } else if (resultCode == RESULT_CANCELED) {
-                 Toast.makeText(getApplicationContext(),"Application requires bluetooth",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Application requires bluetooth", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -147,7 +146,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         connect(mac);
     }
 
-    private void connect(String macAddress){
+    private void connect(String macAddress) {
         BluetoothDevice btDevice = bluetoothAdapter.getRemoteDevice(macAddress);
         ((BackgroundConnection) this.getApplicationContext()).setDevice(btDevice, this);
         BluetoothHandler handler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
@@ -165,9 +164,8 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(MAC_ADDRESS, socket.getRemoteDevice().getAddress());
-            editor.commit();
             editor.apply();
-            if(nfcData != null){
+            if (nfcData != null) {
                 changeActivity.putExtra("nfcValue", nfcData);
             }
             startActivity(changeActivity);
