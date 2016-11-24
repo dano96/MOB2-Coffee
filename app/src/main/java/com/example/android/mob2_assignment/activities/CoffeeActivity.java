@@ -15,16 +15,24 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.android.mob2_assignment.BackgroundConnection;
 import com.example.android.mob2_assignment.Preset;
 import com.example.android.mob2_assignment.R;
 import com.example.android.mob2_assignment.interfaces.BluetoothHandler;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
-public class CoffeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+import static java.util.Locale.ENGLISH;
+
+public class CoffeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private BluetoothHandler mHandler;
     private BluetoothHandler.ConnectedThread readWrite;
@@ -32,8 +40,12 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     private EditText hoursText;
     private EditText minText;
     private RadioGroup timeToMakeRadio;
+    private Button btnStep;
+    private TextView textDate;
     private EditText nameOfPreset;
     private ArrayAdapter<Preset> itemsAdapter;
+    private Calendar date = Calendar.getInstance();
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", ENGLISH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +53,15 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_coffee);
 
         final ArrayList<Preset> arrayList = new ArrayList<>();
+        Calendar date = Calendar.getInstance();
 
-        Preset first = new Preset("Coffee every morning", 1, new Date());
-        Preset second = new Preset("Coffee for 2 in lunch", 2, new Date());
-        Preset third = new Preset("Coffee in an hour", 1, new Date());
+            String sampleDate = DATE_FORMAT.format(date.getTime());
+            Preset first = new Preset("Coffee every morning", 1, sampleDate);
+            Preset second = new Preset("Coffee for 2 in lunch", 2, sampleDate);
+            Preset third = new Preset("Coffee in an hour", 1, sampleDate);
 
-        arrayList.addAll(Arrays.asList(first, second, third));
+            arrayList.addAll(Arrays.asList(first, second, third));
+
 
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
 
@@ -57,6 +72,8 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
         ListView listView = (ListView) findViewById(R.id.presetList);
         listView.setAdapter(itemsAdapter);
+        listView.setLongClickable(true);
+        listView.setOnItemLongClickListener(this);
 
         oneCupButton.setOnClickListener(this);
         twoCupsButton.setOnClickListener(this);
@@ -95,12 +112,25 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 builder.setTitle("Create a preset");
                 builder.setView(dialogLayout);
                 builder.setCancelable(false);
+                date = Calendar.getInstance();
 
                 nameOfPreset = (EditText) dialogLayout.findViewById(R.id.nameOfPreset);
                 radioCupGroup = (RadioGroup) dialogLayout.findViewById(R.id.radioGroupCup);
                 hoursText = (EditText) dialogLayout.findViewById(R.id.hours);
                 minText = (EditText) dialogLayout.findViewById(R.id.minutes);
                 timeToMakeRadio = (RadioGroup) dialogLayout.findViewById(R.id.time_to_makeRadio);
+                textDate = (TextView) dialogLayout.findViewById(R.id.date);
+                btnStep = (Button) dialogLayout.findViewById(R.id.stepDateBtn);
+
+                textDate.setText(DATE_FORMAT.format(date.getTime()));
+
+                btnStep.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        date.add(Calendar.DATE, 1);
+                        textDate.setText(DATE_FORMAT.format(date.getTime()));
+                    }
+                });
 
                 builder.setNegativeButton("Save", new DialogInterface.OnClickListener() {
                     @Override
@@ -110,9 +140,9 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                         int selectedRadioButton = radioCupGroup.getCheckedRadioButtonId();
                         int cup = (selectedRadioButton == R.id.radioButtonOneCup) ? 1 : 2;
 
-                        Preset current = new Preset(name, cup, new Date());
-                        itemsAdapter.add(current);
-
+                            String sampleDate = DATE_FORMAT.format(date.getTime());
+                            Preset current = new Preset(name, cup, sampleDate);
+                            itemsAdapter.add(current);
                     }
                 });
 
@@ -144,5 +174,11 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //To-Do
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        itemsAdapter.remove(itemsAdapter.getItem(position));
+        return true;
     }
 }

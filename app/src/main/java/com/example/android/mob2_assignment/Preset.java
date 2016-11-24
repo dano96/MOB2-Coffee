@@ -5,9 +5,9 @@ import java.util.Date;
 public class Preset {
     private String name;
     private int noOfCups;
-    private Date timestamp;
+    private String timestamp;
 
-    public Preset(String name, int noOfCups, Date timestamp){
+    public Preset(String name, int noOfCups, String timestamp){
         this.name = name;
         this.noOfCups = noOfCups;
         this.timestamp = timestamp;

@@ -8,8 +8,8 @@
 
     <color name="toolbar_text">#F1F1F1</color>
     <color name="card_view_background">#FFFFFF</color>
-    <color name="actListColour">#FFE082</color>
-    <color name="actColour">#FFC107</color>
+    <color name="actListColour">#E6EE9C</color>
+    <color name="actColour">#D4E157</color>
 
     <color name="bluetooth_desc">#B4BAC0</color>
     <color name="bluetooth_name">#2B3D4D</color>
