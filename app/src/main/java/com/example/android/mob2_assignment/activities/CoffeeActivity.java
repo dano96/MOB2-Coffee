@@ -42,8 +42,6 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     private EditText hoursText;
     private EditText minText;
     private RadioGroup timeToMakeRadio;
-    private Button btnStepFor;
-    private Button btnStepBack;
     private TextView textDate;
     private EditText nameOfPreset;
     private ArrayAdapter<Preset> itemsAdapter;
@@ -122,8 +120,8 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 minText = (EditText) dialogLayout.findViewById(R.id.minutes);
                 timeToMakeRadio = (RadioGroup) dialogLayout.findViewById(R.id.time_to_makeRadio);
                 textDate = (TextView) dialogLayout.findViewById(R.id.date);
-                btnStepFor = (Button) dialogLayout.findViewById(R.id.stepDateForBtn);
-                btnStepBack = (Button) dialogLayout.findViewById(R.id.stepDateBackBtn);
+                Button btnStepFor = (Button) dialogLayout.findViewById(R.id.stepDateForBtn);
+                Button btnStepBack = (Button) dialogLayout.findViewById(R.id.stepDateBackBtn);
 
                 textDate.setText(DATE_FORMAT.format(date.getTime()));
 
