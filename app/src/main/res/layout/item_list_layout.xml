@@ -10,6 +10,7 @@
     <ImageView
         android:layout_width="@dimen/listview_img"
         android:layout_height="@dimen/listview_img"
+        android:src="@drawable/coffee_bean_icon"
          />
 
     <LinearLayout
