@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -88,7 +89,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
     }
 
     private void init() {
-        ListView listView = (ListView) findViewById(R.id.listview_main);
+        ListView listView = (ListView) findViewById(R.id.listView_main);
         Button buttonScan = (Button) findViewById(R.id.scan);
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         devices = new ArrayList<>();
@@ -106,7 +107,9 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(ActivityConnect.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    }
                 } else {
                     bluetoothAdapter.startDiscovery();
                 }
@@ -123,8 +126,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
                 init();
             } else if (resultCode == RESULT_CANCELED) {
                 showToast("Application requires bluetooth");
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                finish();
             }
         }
     }
