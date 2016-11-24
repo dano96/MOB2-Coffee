@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 
@@ -37,7 +38,7 @@ public class CoffeeListAdapter extends ArrayAdapter<BluetoothDevice> {
         return item;
     }
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         TextView name, address;
     }
 }

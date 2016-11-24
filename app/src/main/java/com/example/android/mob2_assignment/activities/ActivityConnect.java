@@ -20,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -29,9 +28,9 @@ import android.widget.Toast;
 
 import com.example.android.mob2_assignment.BackgroundConnection;
 import com.example.android.mob2_assignment.CoffeeListAdapter;
+import com.example.android.mob2_assignment.R;
 import com.example.android.mob2_assignment.interfaces.BluetoothHandler;
 import com.example.android.mob2_assignment.interfaces.NFChandler;
-import com.example.android.mob2_assignment.R;
 
 import java.util.ArrayList;
 import java.util.Set;

@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,13 +22,10 @@ import com.example.android.mob2_assignment.Preset;
 import com.example.android.mob2_assignment.R;
 import com.example.android.mob2_assignment.interfaces.BluetoothHandler;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import static java.util.Locale.ENGLISH;
 
@@ -55,12 +51,12 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         final ArrayList<Preset> arrayList = new ArrayList<>();
         Calendar date = Calendar.getInstance();
 
-            String sampleDate = DATE_FORMAT.format(date.getTime());
-            Preset first = new Preset("Coffee every morning", 1, sampleDate);
-            Preset second = new Preset("Coffee for 2 in lunch", 2, sampleDate);
-            Preset third = new Preset("Coffee in an hour", 1, sampleDate);
+        String sampleDate = DATE_FORMAT.format(date.getTime());
+        Preset first = new Preset("Coffee every morning", 1, sampleDate);
+        Preset second = new Preset("Coffee for 2 in lunch", 2, sampleDate);
+        Preset third = new Preset("Coffee in an hour", 1, sampleDate);
 
-            arrayList.addAll(Arrays.asList(first, second, third));
+        arrayList.addAll(Arrays.asList(first, second, third));
 
 
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);

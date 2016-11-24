@@ -10,8 +10,7 @@
     <ImageView
         android:layout_width="@dimen/listview_img"
         android:layout_height="@dimen/listview_img"
-        android:src="@drawable/coffee_bean_icon"
-         />
+        android:src="@drawable/coffee_bean_icon" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -28,8 +27,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:textColor="@color/bluetooth_name"
-            android:textSize="16sp"
-            />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/machineAddress"
@@ -40,6 +38,5 @@
             android:maxLines="1"
             android:textColor="@color/bluetooth_desc"
             android:textSize="12sp" />
-
     </LinearLayout>
 </LinearLayout>
