@@ -36,6 +36,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     private BluetoothHandler.ConnectedThread readWrite;
     private RadioGroup radioCupGroup;
     private RadioGroup timeToMakeRadio;
+    private EditText timeField;
     private TextView textDate;
     private EditText nameOfPreset;
     private ArrayAdapter<Preset> itemsAdapter;
@@ -112,6 +113,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 radioCupGroup = (RadioGroup) dialogLayout.findViewById(R.id.radioGroupCup);
                 timeToMakeRadio = (RadioGroup) dialogLayout.findViewById(R.id.time_to_makeRadio);
                 textDate = (TextView) dialogLayout.findViewById(R.id.date);
+                timeField = (EditText) dialogLayout.findViewById(R.id.time);
                 Button btnStepFor = (Button) dialogLayout.findViewById(R.id.stepDateForBtn);
                 Button btnStepBack = (Button) dialogLayout.findViewById(R.id.stepDateBackBtn);
 
