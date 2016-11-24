@@ -28,4 +28,5 @@
     <string name="radioBtnDateSelected">Selected date</string>
     <string name="step_forwardBtn">Step forward</string>
     <string name="current_dateText">[Current date]</string>
+    <string name="BtnStep_backward">step backward</string>
 </resources>

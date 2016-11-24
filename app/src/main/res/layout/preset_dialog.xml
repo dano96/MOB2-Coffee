@@ -118,10 +118,27 @@
         android:text="@string/current_dateText"
         android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/stepDateBtn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/step_forwardBtn" />
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/stepDateForBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/step_forwardBtn" />
+
+        <Button
+            android:id="@+id/stepDateBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/BtnStep_backward" />
+    </LinearLayout>
 </LinearLayout>

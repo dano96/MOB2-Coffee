@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.mob2_assignment.BackgroundConnection;
 import com.example.android.mob2_assignment.Preset;
@@ -34,18 +35,19 @@ import static java.util.Locale.ENGLISH;
 
 public class CoffeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", ENGLISH);
     private BluetoothHandler mHandler;
     private BluetoothHandler.ConnectedThread readWrite;
     private RadioGroup radioCupGroup;
     private EditText hoursText;
     private EditText minText;
     private RadioGroup timeToMakeRadio;
-    private Button btnStep;
+    private Button btnStepFor;
+    private Button btnStepBack;
     private TextView textDate;
     private EditText nameOfPreset;
     private ArrayAdapter<Preset> itemsAdapter;
     private Calendar date = Calendar.getInstance();
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", ENGLISH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +109,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 readWrite.write("0".getBytes());
                 break;
             case R.id.setPresetButton:
-                @SuppressLint("InflateParams") View dialogLayout = getLayoutInflater().inflate(R.layout.preset_dialog, null);
+                @SuppressLint("InflateParams") final View dialogLayout = getLayoutInflater().inflate(R.layout.preset_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Create a preset");
                 builder.setView(dialogLayout);
@@ -120,14 +122,25 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 minText = (EditText) dialogLayout.findViewById(R.id.minutes);
                 timeToMakeRadio = (RadioGroup) dialogLayout.findViewById(R.id.time_to_makeRadio);
                 textDate = (TextView) dialogLayout.findViewById(R.id.date);
-                btnStep = (Button) dialogLayout.findViewById(R.id.stepDateBtn);
+                btnStepFor = (Button) dialogLayout.findViewById(R.id.stepDateForBtn);
+                btnStepBack = (Button) dialogLayout.findViewById(R.id.stepDateBackBtn);
 
                 textDate.setText(DATE_FORMAT.format(date.getTime()));
 
-                btnStep.setOnClickListener(new View.OnClickListener() {
+                btnStepFor.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         date.add(Calendar.DATE, 1);
+                        textDate.setText(DATE_FORMAT.format(date.getTime()));
+                    }
+                });
+
+                btnStepBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (date.after(Calendar.getInstance())) {
+                            date.add(Calendar.DATE, -1);
+                        }
                         textDate.setText(DATE_FORMAT.format(date.getTime()));
                     }
                 });
@@ -140,9 +153,14 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                         int selectedRadioButton = radioCupGroup.getCheckedRadioButtonId();
                         int cup = (selectedRadioButton == R.id.radioButtonOneCup) ? 1 : 2;
 
-                            String sampleDate = DATE_FORMAT.format(date.getTime());
-                            Preset current = new Preset(name, cup, sampleDate);
+                        String sampleDate = DATE_FORMAT.format(date.getTime());
+                        Preset current = new Preset(name, cup, sampleDate);
+
+                        if (name.equals("") || selectedRadioButton == -1) {
+                            Toast.makeText(dialogLayout.getContext(), "Name not written or number of cups not set.", Toast.LENGTH_LONG).show();
+                        } else {
                             itemsAdapter.add(current);
+                        }
                     }
                 });
 
