@@ -117,6 +117,18 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 Button btnStepFor = (Button) dialogLayout.findViewById(R.id.stepDateForBtn);
                 Button btnStepBack = (Button) dialogLayout.findViewById(R.id.stepDateBackBtn);
 
+                if (timeToMakeRadio.getCheckedRadioButtonId()== R.id.radioButtonEvery) {
+                    textDate.setVisibility(View.INVISIBLE);
+                    btnStepFor.setVisibility(View.INVISIBLE);
+                    btnStepBack.setVisibility(View.INVISIBLE);
+                }
+
+                if (timeToMakeRadio.getCheckedRadioButtonId() == R.id.radioButtonSelected) {
+                    textDate.setVisibility(View.VISIBLE);
+                    btnStepFor.setVisibility(View.VISIBLE);
+                    btnStepBack.setVisibility(View.VISIBLE);
+                }
+
                 textDate.setText(DATE_FORMAT.format(date.getTime()));
 
                 btnStepFor.setOnClickListener(new View.OnClickListener() {
