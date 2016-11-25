@@ -1,7 +1,9 @@
 package com.example.android.mob2_assignment.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,17 +23,22 @@ import com.example.android.mob2_assignment.BackgroundConnection;
 import com.example.android.mob2_assignment.Preset;
 import com.example.android.mob2_assignment.R;
 import com.example.android.mob2_assignment.interfaces.BluetoothHandler;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import static java.util.Locale.ENGLISH;
 
 public class CoffeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", ENGLISH);
+    private static final String PRESET_KEY = "pKey";
+    ArrayList<Preset> arrayListPresets;
     private BluetoothHandler mHandler;
     private BluetoothHandler.ConnectedThread readWrite;
     private RadioGroup radioCupGroup;
@@ -43,24 +50,34 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     private Calendar date = Calendar.getInstance();
     private Button btnStepFor;
     private Button btnStepBack;
+    private Gson gson;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private boolean listSave = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee);
 
-        final ArrayList<Preset> arrayList = new ArrayList<>();
+        pref = getPreferences(Context.MODE_PRIVATE);
+        editor = pref.edit();
+        gson = new Gson();
+
+        arrayListPresets = readArrayList(PRESET_KEY);
         Calendar date = Calendar.getInstance();
 
-        String sampleDate = DATE_FORMAT.format(date.getTime());
+        /*String sampleDate = DATE_FORMAT.format(date.getTime());
         Preset first = new Preset("Coffee every morning", 1, sampleDate);
         Preset second = new Preset("Coffee for 2 in lunch", 2, sampleDate);
         Preset third = new Preset("Coffee in an hour", 1, sampleDate);
 
-        arrayList.addAll(Arrays.asList(first, second, third));
+        arrayListPresets.addAll(Arrays.asList(first, second, third));*/
 
         // Create a regular adapter for the preset list
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
+
+        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListPresets);
 
         ImageButton oneCupButton = (ImageButton) findViewById(R.id.oneCupButton);
         ImageButton twoCupsButton = (ImageButton) findViewById(R.id.twoCupsButton);
@@ -180,7 +197,9 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                         if (name.equals("") || selectedRadioButton == -1) {
                             Toast.makeText(dialogLayout.getContext(), "Name not written or number of cups not set.", Toast.LENGTH_LONG).show();
                         } else {
-                            itemsAdapter.add(current);
+                            arrayListPresets.add(current);
+                            listSave = true;
+                            itemsAdapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -200,6 +219,33 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    private ArrayList<Preset> readArrayList(String key) {
+        ArrayList<Preset> list;
+        String favouriteJson = pref.getString(key, "");
+        if (!favouriteJson.equals("")) {
+            Type type = new TypeToken<List<Preset>>() {
+            }.getType();
+            list = gson.fromJson(favouriteJson, type);
+        } else {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
+    private void saveArrayList(ArrayList<Preset> list, String key) {
+        editor.putString(key, gson.toJson(list));
+        editor.commit();
+        listSave = false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (listSave) {
+            this.saveArrayList(arrayListPresets, PRESET_KEY);
+        }
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -212,6 +258,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Here we can add the option to edit a preset/disable it/enable it
     }
@@ -220,6 +267,8 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         itemsAdapter.remove(itemsAdapter.getItem(position));
+        listSave = true;
+        itemsAdapter.notifyDataSetChanged();
         return true;
     }
 }
