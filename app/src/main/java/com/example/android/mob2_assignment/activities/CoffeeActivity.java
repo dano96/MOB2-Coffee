@@ -75,8 +75,6 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         arrayListPresets.addAll(Arrays.asList(first, second, third));*/
 
         // Create a regular adapter for the preset list
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
-
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListPresets);
 
         ImageButton oneCupButton = (ImageButton) findViewById(R.id.oneCupButton);
@@ -258,7 +256,6 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Here we can add the option to edit a preset/disable it/enable it
     }
