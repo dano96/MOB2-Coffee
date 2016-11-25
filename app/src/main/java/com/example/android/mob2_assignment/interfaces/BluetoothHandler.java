@@ -8,10 +8,8 @@ import android.widget.Toast;
 import com.example.android.mob2_assignment.activities.ActivityConnect;
 import com.example.android.mob2_assignment.activities.CoffeeActivity;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.UUID;
@@ -116,14 +114,12 @@ public class BluetoothHandler {
         @Override
         public void run() {
             byte[] buffer = new byte[1024];
-            int bytes;
 
             while (true) {
                 try {
-                    bytes = mmInStream.read(buffer);
-                    int finalBytes = bytes;
+                    mmInStream.read(buffer);
                     final byte[] bufferBytes = buffer;
-                    Log.d("buggerlog", Arrays.toString(bufferBytes));
+                    Log.d("bufferLog", Arrays.toString(bufferBytes));
                     coffeeActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

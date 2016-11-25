@@ -5,18 +5,19 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Parcelable;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 public class NFChandler {
 
-    public static String readTag(Intent intent){
+    public static String readTag(Intent intent) {
         NdefMessage[] msgs;
-        if(intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)){
+        if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            if(rawMsgs!=null){
+            if (rawMsgs != null) {
                 msgs = new NdefMessage[rawMsgs.length];
-                for(int i = 0; i < rawMsgs.length; i++){
+                for (int i = 0; i < rawMsgs.length; i++) {
                     msgs[i] = (NdefMessage) rawMsgs[i];
                 }
                 NdefRecord[] records = msgs[0].getRecords();
