@@ -53,6 +53,8 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     private Gson gson;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+
+    //used to avoid saving unnecessarily
     private boolean listSave = false;
 
     @Override
@@ -206,11 +208,12 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
     private ArrayList<Preset> readArrayList(String key) {
         ArrayList<Preset> list;
-        String favouriteJson = pref.getString(key, "");
-        if (!favouriteJson.equals("")) {
+        String stringOfPresets = pref.getString(key, "");
+        if (!stringOfPresets.equals("")) {
+            //It makes a list of presets from the favouriteJson string
             Type type = new TypeToken<List<Preset>>() {
             }.getType();
-            list = gson.fromJson(favouriteJson, type);
+            list = gson.fromJson(stringOfPresets, type);
         } else {
             list = new ArrayList<>();
         }
