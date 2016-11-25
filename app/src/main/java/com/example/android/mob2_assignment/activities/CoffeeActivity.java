@@ -41,6 +41,8 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     private EditText nameOfPreset;
     private ArrayAdapter<Preset> itemsAdapter;
     private Calendar date = Calendar.getInstance();
+    private Button btnStepFor;
+    private Button btnStepBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,20 +116,23 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 timeToMakeRadio = (RadioGroup) dialogLayout.findViewById(R.id.time_to_makeRadio);
                 textDate = (TextView) dialogLayout.findViewById(R.id.date);
                 timeField = (EditText) dialogLayout.findViewById(R.id.time);
-                Button btnStepFor = (Button) dialogLayout.findViewById(R.id.stepDateForBtn);
-                Button btnStepBack = (Button) dialogLayout.findViewById(R.id.stepDateBackBtn);
+                btnStepFor = (Button) dialogLayout.findViewById(R.id.stepDateForBtn);
+                btnStepBack = (Button) dialogLayout.findViewById(R.id.stepDateBackBtn);
 
-                if (timeToMakeRadio.getCheckedRadioButtonId() == R.id.radioButtonEvery) {
-                    textDate.setVisibility(View.INVISIBLE);
-                    btnStepFor.setVisibility(View.INVISIBLE);
-                    btnStepBack.setVisibility(View.INVISIBLE);
-                }
-
-                if (timeToMakeRadio.getCheckedRadioButtonId() == R.id.radioButtonSelected) {
-                    textDate.setVisibility(View.VISIBLE);
-                    btnStepFor.setVisibility(View.VISIBLE);
-                    btnStepBack.setVisibility(View.VISIBLE);
-                }
+                timeToMakeRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        if (checkedId == R.id.radioButtonEvery) {
+                            textDate.setVisibility(View.INVISIBLE);
+                            btnStepFor.setVisibility(View.INVISIBLE);
+                            btnStepBack.setVisibility(View.INVISIBLE);
+                        } else if (checkedId == R.id.radioButtonSelected) {
+                            textDate.setVisibility(View.VISIBLE);
+                            btnStepFor.setVisibility(View.VISIBLE);
+                            btnStepBack.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
 
                 textDate.setText(DATE_FORMAT.format(date.getTime()));
 
