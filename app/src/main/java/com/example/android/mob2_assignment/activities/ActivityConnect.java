@@ -34,6 +34,7 @@ import com.example.android.mob2_assignment.interfaces.NFChandler;
 import java.util.ArrayList;
 import java.util.Set;
 
+// First screen when you launch the application
 public class ActivityConnect extends AppCompatActivity implements AdapterView.OnItemClickListener {
     public static final int REQUEST_ENABLE_BT = 105;
     private static final int REQUEST_RUNTIME_PERMISSION = 1;
@@ -42,16 +43,19 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
     private BluetoothAdapter bluetoothAdapter;
     private ArrayList<BluetoothDevice> devices;
     private CoffeeListAdapter adapter;
+
+    // Find available devicees
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            // If bluetooth device is found
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Get bluetooth devices from intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                //Add devices to arraylist to present on the screen
                 if (device.getName() != null && !devices.contains(device)) {
-                    synchronized (this) {
                         devices.add(device);
                         adapter.notifyDataSetChanged();
-                    }
                 }
             }
         }
@@ -64,6 +68,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
+        // Get the bluetooth adapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             showToast("Your device does not support Bluetooth");
@@ -73,12 +78,14 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
+            // If bluetooth is on
             init();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
     }
 
+    // Initialize - get adapter for the list and populating the list
     private void init() {
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         devices = new ArrayList<>();
@@ -86,17 +93,23 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             devices.addAll(bondedDevices);
         }
         ListView listView = (ListView) findViewById(R.id.listView_main);
+        // Create new customized adapter
         adapter = new CoffeeListAdapter(this, devices);
         listView.setAdapter(adapter);
+        // OnItemClickListener for clicking on an item on the list
         listView.setOnItemClickListener(this);
 
+        // The broadcast receiver will only be called if this finds a new device
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        // Register broadcast receiver
         registerReceiver(mReceiver, filter);
 
+        // OnClickListener for clicking the scan button
         Button buttonScan = (Button) findViewById(R.id.scan);
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // This gives runtime permisson, because scanning requires location permission
                 if (ContextCompat.checkSelfPermission(ActivityConnect.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -107,14 +120,17 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
             }
         });
 
+        // Reading NFC tag
         nfcData = NFChandler.readTag(getIntent());
+
+        // Check if we have saved a mac address of a bluetooth device, so when you sign in again the app will connect to the last known device automatically
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String mac = preferences.getString(MAC_ADDRESS, "");
         if (!mac.equals("")) {
             connect(mac);
         }
     }
-
+    // Checks if you have bluetooth on in your phone, if not it asks if it can enable it
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -129,10 +145,12 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         }
     }
 
+    // For runtime permission - to check if you give permission for location
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_RUNTIME_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // If you have permission, start looking for devices
                 bluetoothAdapter.startDiscovery();
             } else {
                 Toast.makeText(this, "Finding devices requires access to your location", Toast.LENGTH_LONG).show();
@@ -140,6 +158,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
         }
     }
 
+    // When you click on one item on the list
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String mac = devices.get(position).getAddress();
@@ -147,17 +166,24 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
     }
 
     private void connect(String macAddress) {
+        // Creates a Bluetooth device based on the mac address
         BluetoothDevice btDevice = bluetoothAdapter.getRemoteDevice(macAddress);
+        // Call setDevice = create new handler
         ((BackgroundConnection) this.getApplicationContext()).setDevice(btDevice, this);
+        // Get the handler you just made
         BluetoothHandler handler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
+        // Create a new thread, so it doesn't block the main program when you connect to the bluetooth device
         Thread connection = handler.getConnectionThread();
-
+        // Loading screen
         dialog = ProgressDialog.show(this, "Connecting...", "Connecting to the device", true, false);
         dialog.show();
+        // Start the thread
         connection.start();
     }
 
+    // Entering the main activity
     public void startNewActivity(BluetoothSocket socket) {
+        // Close loading screen
         dialog.dismiss();
         if (socket.isConnected()) {
             Intent changeActivity = new Intent(ActivityConnect.this, CoffeeActivity.class);
@@ -193,6 +219,7 @@ public class ActivityConnect extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onBackPressed() {
+        // When you press back one time this will show a toast that tells you that if you press back again it will close the application
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             bluetoothAdapter.disable();

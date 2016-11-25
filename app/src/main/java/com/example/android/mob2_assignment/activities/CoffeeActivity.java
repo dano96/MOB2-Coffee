@@ -59,7 +59,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
         arrayList.addAll(Arrays.asList(first, second, third));
 
-
+        // Create a regular adapter for the preset list
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
 
         ImageButton oneCupButton = (ImageButton) findViewById(R.id.oneCupButton);
@@ -69,6 +69,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
         ListView listView = (ListView) findViewById(R.id.presetList);
         listView.setAdapter(itemsAdapter);
+        // Delete if you press and hold a list item
         listView.setLongClickable(true);
         listView.setOnItemLongClickListener(this);
 
@@ -79,8 +80,11 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         listView.setOnItemClickListener(this);
         mHandler = ((BackgroundConnection) this.getApplicationContext()).getConnectionHandler();
 
+        // kGet read and write thread
         readWrite = mHandler.getReadWriteThread();
+        // set activity to handler so you can call methods from thread in this activity
         mHandler.setCoffeeActivity(this);
+        // Get extras from the previous activity that send extras to this one
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String nfcValue = bundle.getString("nfcValue", "");
@@ -104,10 +108,12 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 readWrite.write("h".getBytes());
                 break;
             case R.id.setPresetButton:
+                // Opening the dialog - to set presets
                 @SuppressLint("InflateParams") final View dialogLayout = getLayoutInflater().inflate(R.layout.preset_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Create a preset");
                 builder.setView(dialogLayout);
+                // If you press outside of the dialog it won't close
                 builder.setCancelable(false);
                 date = Calendar.getInstance();
 
@@ -119,9 +125,11 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                 btnStepFor = (Button) dialogLayout.findViewById(R.id.stepDateForBtn);
                 btnStepBack = (Button) dialogLayout.findViewById(R.id.stepDateBackBtn);
 
+                // Get info from radio buttons
                 timeToMakeRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        // Toggle to show or hide date, hide if you choose "Every day"
                         if (checkedId == R.id.radioButtonEvery) {
                             textDate.setVisibility(View.INVISIBLE);
                             btnStepFor.setVisibility(View.INVISIBLE);
@@ -136,6 +144,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
                 textDate.setText(DATE_FORMAT.format(date.getTime()));
 
+                // Increment date
                 btnStepFor.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -144,6 +153,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
+                // Decrement date by adding -1
                 btnStepBack.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -160,11 +170,13 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                         String name = nameOfPreset.getText().toString();
 
                         int selectedRadioButton = radioCupGroup.getCheckedRadioButtonId();
+                        // If the selected radio button == 1 cup, send 1, else 2
                         int cup = (selectedRadioButton == R.id.radioButtonOneCup) ? 1 : 2;
 
                         String sampleDate = DATE_FORMAT.format(date.getTime());
                         Preset current = new Preset(name, cup, sampleDate);
 
+                        // Make sure everything is filled out/chosen
                         if (name.equals("") || selectedRadioButton == -1) {
                             Toast.makeText(dialogLayout.getContext(), "Name not written or number of cups not set.", Toast.LENGTH_LONG).show();
                         } else {
@@ -179,6 +191,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
                         dialog.dismiss();
                     }
                 });
+                // Show dialog after defining how it should be
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 break;
@@ -200,9 +213,10 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //To-Do
+        //Here we can add the option to edit a preset/disable it/enable it
     }
 
+    // If you press and hold an item you delete it
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         itemsAdapter.remove(itemsAdapter.getItem(position));
