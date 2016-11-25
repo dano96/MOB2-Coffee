@@ -243,9 +243,7 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //To-Do
-    }
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
