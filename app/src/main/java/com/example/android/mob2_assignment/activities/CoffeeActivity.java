@@ -95,13 +95,13 @@ public class CoffeeActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.oneCupButton:
                 Log.d("Writing", "Is it working");
-                readWrite.write("1".getBytes());
+                readWrite.write("o".getBytes());
                 break;
             case R.id.twoCupsButton:
-                readWrite.write("2".getBytes());
+                readWrite.write("t".getBytes());
                 break;
             case R.id.heatUp:
-                readWrite.write("0".getBytes());
+                readWrite.write("h".getBytes());
                 break;
             case R.id.setPresetButton:
                 @SuppressLint("InflateParams") final View dialogLayout = getLayoutInflater().inflate(R.layout.preset_dialog, null);

@@ -3,11 +3,17 @@ package com.example.android.mob2_assignment.interfaces;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.example.android.mob2_assignment.activities.ActivityConnect;
 import com.example.android.mob2_assignment.activities.CoffeeActivity;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class BluetoothHandler {
@@ -114,14 +120,21 @@ public class BluetoothHandler {
 
             while (true) {
                 try {
-                    Log.d("Reading", "Is it reading");
                     bytes = mmInStream.read(buffer);
-                    Log.d("Bytes", bytes + " ");
+                    int finalBytes = bytes;
+                    final byte[] bufferBytes = buffer;
+                    Log.d("buggerlog", Arrays.toString(bufferBytes));
                     coffeeActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            if (bufferBytes[0] == '0') {
+                                Toast.makeText(coffeeActivity, "Not enough water", Toast.LENGTH_LONG).show();
+                            } else if (bufferBytes[0] == '1') {
+                                Toast.makeText(coffeeActivity, "Coffee is on the way", Toast.LENGTH_LONG).show();
+                            }
                         }
                     });
+                    buffer = new byte[256];
                 } catch (IOException e) {
                     break;
                 }
