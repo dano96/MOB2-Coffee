@@ -127,6 +127,8 @@ public class BluetoothHandler {
                                 Toast.makeText(coffeeActivity, "Not enough water", Toast.LENGTH_LONG).show();
                             } else if (bufferBytes[0] == '1') {
                                 Toast.makeText(coffeeActivity, "Coffee is on the way", Toast.LENGTH_LONG).show();
+                            } else if(bufferBytes[0] == '2'){
+                                Toast.makeText(coffeeActivity, "Machine is heating", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
